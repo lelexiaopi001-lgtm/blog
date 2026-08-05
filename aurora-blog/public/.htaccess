@@ -1,0 +1,18 @@
+# Aurora Blog —— Apache 环境备用伪静态（Nginx/宝塔请使用 nginx.conf）
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # 静态资源直接访问
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 前台路由
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# 上传目录禁止执行 PHP
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>

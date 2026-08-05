@@ -1,0 +1,30 @@
+# 运行配置与上传文件
+aurora-blog/config/config.php
+aurora-blog/public/uploads/*
+!aurora-blog/public/uploads/.gitkeep
+
+# 日志与临时文件
+*.log
+*.cache
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.idea/
+.vscode/
+
+# 依赖目录
+node_modules/
+vendor/
+
+# 环境文件
+.env
+.env.local
+
+# 压缩包备份（保留根目录 blog.zip 作为发布物）
+*.tar.gz
+*.zip
+!blog.zip

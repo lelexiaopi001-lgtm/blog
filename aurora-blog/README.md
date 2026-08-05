@@ -1,9 +1,5 @@
 # ✦ Aurora Blog 极光博客
 
-[![PHP 8.0+](https://img.shields.io/badge/PHP-8.0%2B-777bb4?logo=php&logoColor=white)](https://php.net)
-[![MySQL 5.7+](https://img.shields.io/badge/MySQL-5.7%2B-4479A1?logo=mysql&logoColor=white)](https://mysql.com)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
 > 一款功能完整、UI 高端大气的个人博客系统。原生 PHP 8 + MySQL，零第三方依赖，专为 **Ubuntu + 宝塔面板** 部署优化。
 
 ---
@@ -17,9 +13,7 @@
 - 评论区：审核机制、嵌套回复、反垃圾（蜜罐 + 频率限制）
 - 关于页 + 友情链接展示
 - RSS 订阅（`/rss.xml`）、SEO（title/description/keywords）
-- **Open Graph / Twitter Card / Schema.org 结构化数据**
-- **PWA**：manifest、service worker、离线页面、可安装到桌面/主屏
-- **暗色 / 亮色主题一键切换**（localStorage 记忆，支持自定义强调色）
+- **暗色 / 亮色主题一键切换**（localStorage 记忆）
 - 全响应式（PC / 平板 / 手机）
 
 ### 🛠 后台（可视化管理系统）
@@ -29,7 +23,7 @@
 - **评论管理**：待审/通过/拒绝/删除，一键处理
 - **友情链接**：增删改、排序、显示开关
 - **访问统计**：7/30/90 天 PV/UV 趋势、热门文章 Top10、分类分布
-- **站点设置**：名称、描述、SEO、ICP、头像、社交链接、关于页、评论开关、每页文章数、**PWA 开关、SMTP 邮件通知、主题强调色、站点公告、Hero 背景图**
+- **站点设置**：名称、描述、SEO、ICP、头像、社交链接、关于页、评论开关、每页文章数
 - **个人资料**：昵称/邮箱修改、密码修改
 
 ### 🔒 安全设计
@@ -46,33 +40,24 @@
 ## 📁 目录结构
 
 ```
-.
-├── README.md                 # 项目说明
-├── LICENSE                   # MIT 许可证
-├── .gitignore                # Git 忽略规则
-├── blog.zip                  # 一键部署包
-├── aurora-blog/              # 源码目录
-│   ├── public/               # ⭐ 网站根目录（宝塔站点目录指向这里）
-│   │   ├── index.php         # 前台入口
-│   │   ├── admin/index.php   # 后台入口 (/admin/index.php)
-│   │   ├── install.php       # 安装向导入口
-│   │   ├── service-worker.js # PWA Service Worker
-│   │   ├── manifest.json     # PWA 配置清单
-│   │   ├── offline.html      # 离线fallback页面
-│   │   ├── assets/css/       # main.css(前台) / admin.css(后台)
-│   │   ├── assets/js/        # main.js(前台) / admin.js(后台)
-│   │   └── uploads/          # 图片上传目录（需写权限）
-│   ├── app/
-│   │   ├── core/             # 核心框架 (DB/Auth/View/Helper/路由/Markdown)
-│   │   ├── controllers/      # 前台控制器
-│   │   ├── views/            # 前台模板
-│   │   └── admin/            # 后台控制器 + 视图
-│   ├── config/               # 配置文件（config.sample.php 为模板）
-│   ├── database/blog.sql     # 数据库初始化脚本
-│   ├── tools/install.php     # 安装向导逻辑（装完请删除）
-│   ├── nginx.conf            # 宝塔伪静态规则
-│   └── docs/                 # 部署与开发文档
-└── ...
+aurora-blog/
+├── public/                  # ⭐ 网站根目录（宝塔站点目录指向这里）
+│   ├── index.php            # 前台入口
+│   ├── admin/index.php      # 后台入口 (/admin/index.php)
+│   ├── assets/css/          # main.css(前台) / admin.css(后台)
+│   ├── assets/js/           # main.js(前台) / admin.js(后台)
+│   ├── uploads/             # 图片上传目录（需写权限 755）
+│   └── .htaccess            # Apache 备用
+├── app/
+│   ├── core/                # 核心框架 (DB/Auth/View/Helper/路由/Markdown)
+│   ├── controllers/         # 前台控制器
+│   ├── views/               # 前台模板
+│   └── admin/               # 后台控制器 + 视图
+├── config/config.sample.php # 配置示例（安装向导自动生成 config.php）
+├── database/blog.sql        # 数据库初始化脚本
+├── tools/install.php        # 🚀 安装向导（装完请删除）
+├── nginx.conf               # 宝塔伪静态规则
+└── README.md
 ```
 
 ---
@@ -85,9 +70,8 @@
 > PHP 需启用扩展：`pdo_mysql`、`mbstring`、`fileinfo`（宝塔默认已启用）。
 
 ### 第 2 步：上传项目
-1. 下载仓库中的 `blog.zip`
-2. 上传到服务器并解压到 `/www/wwwroot/aurora-blog`
-3. 宝塔 → 网站 → 添加站点：
+1. 将 `aurora-blog` 整个目录上传到服务器，例如 `/www/wwwroot/aurora-blog`
+2. 宝塔 → 网站 → 添加站点：
    - 域名：你的域名（如 `blog.example.com`）
    - 根目录：**`/www/wwwroot/aurora-blog/public`** ← 指向 public！
    - PHP 版本：选择 7.4 或 8.x
@@ -96,7 +80,7 @@
 宝塔 → 数据库 → 添加数据库（记下名称/用户/密码，安装向导要用）。
 
 ### 第 4 步：配置伪静态
-网站 → 设置 → **伪静态** → 粘贴 `nginx.conf` 文件内容，核心一行：
+网站 → 设置 → **伪静态** → 粘贴 `nginx.conf` 文件内容（或直接选 ThinkPHP 模板改一下），核心一行：
 
 ```nginx
 location / {
@@ -107,8 +91,8 @@ location / {
 ### 第 5 步：目录权限
 ```bash
 chmod -R 755 /www/wwwroot/aurora-blog
-chmod -R 777 /www/wwwroot/aurora-blog/public/uploads
-chmod 777 /www/wwwroot/aurora-blog/config
+chmod -R 775 /www/wwwroot/aurora-blog/public/uploads
+chmod 775 /www/wwwroot/aurora-blog/config
 ```
 
 ### 第 6 步：运行安装向导
@@ -128,17 +112,19 @@ chmod 777 /www/wwwroot/aurora-blog/config
 
 ## ⚙️ 手动安装（可选）
 
+不习惯向导？手动三步：
+
 ```bash
 # 1. 导入数据库
-mysql -u root -p 数据库名 < aurora-blog/database/blog.sql
+mysql -u root -p < database/blog.sql
 
 # 2. 生成配置文件
-cp aurora-blog/config/config.sample.php aurora-blog/config/config.php
-vim aurora-blog/config/config.php   # 填写数据库信息，修改 app.key 为随机字符串
+cp config/config.sample.php config/config.php
+vim config/config.php   # 填写数据库信息，修改 app.key 为随机字符串
 
 # 3. 手动插入管理员（密码会 bcrypt 加密）
 php -r "echo password_hash('你的密码', PASSWORD_DEFAULT);"
-mysql -u root -p -e "USE 数据库名; INSERT INTO users (username, password_hash, email, nickname) VALUES ('admin', '<上面输出的hash>', '', 'admin');"
+mysql -u root -p -e "USE aurora_blog; INSERT INTO users (username, password_hash, email, nickname) VALUES ('admin', '<上面输出的hash>', '', 'admin');"
 ```
 
 ---
@@ -149,9 +135,9 @@ mysql -u root -p -e "USE 数据库名; INSERT INTO users (username, password_has
 |------|------|
 | 页面 404 / 伪静态不生效 | 检查站点根目录是否为 `public`，伪静态是否已配置 |
 | 数据库连接失败 | 检查 `config/config.php` 的 host/端口/账号密码 |
-| 图片上传失败 | `public/uploads` 目录权限不足，`chmod -R 777` |
-| 评论提示「安全令牌校验失败」| 刷新页面或清除浏览器缓存；PWA 缓存会在下次更新后自动失效 |
+| 图片上传失败 | `public/uploads` 目录权限不足，`chmod -R 775` |
 | 后台登录 403 令牌错误 | 清浏览器 Cookie 重试（CSRF 会话过期） |
+| 修改了站点名没生效 | 前台设置存在数据库，后台「站点设置」里改 |
 | 想启用 HTTPS | 宝塔 → SSL → Let's Encrypt 一键申请 |
 
 ---
@@ -177,16 +163,4 @@ mysql -u root -p -e "USE 数据库名; INSERT INTO users (username, password_has
 
 ---
 
-## 🤝 参与贡献
-
-欢迎提交 Issue 和 Pull Request。
-
-1. Fork 本仓库
-2. 创建你的分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交改动 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 创建 Pull Request
-
----
-
-*Aurora Blog v1.0 · 用 ❤ 与代码构建 · [MIT License](LICENSE)*
+*Aurora Blog v1.0 · 用 ❤ 与代码构建 · MIT License*

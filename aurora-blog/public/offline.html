@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>离线 - Aurora Blog</title>
+<style>
+:root { --bg: #0a0a0c; --surface: #141417; --border: #27272a; --text: #f5f5f7; --text-dim: #a1a1aa; --accent: #f59e0b; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.offline-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 48px 40px; text-align: center; max-width: 420px; width: 100%; }
+.offline-icon { font-size: 56px; margin-bottom: 20px; }
+h1 { font-size: 22px; margin-bottom: 10px; }
+p { color: var(--text-dim); font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; background: var(--accent); color: #000; text-decoration: none; font-weight: 600; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="offline-card">
+    <div class="offline-icon">✦</div>
+    <h1>当前处于离线状态</h1>
+    <p>网络连接似乎中断了。请检查网络后刷新页面，或返回首页查看已缓存的内容。</p>
+    <a href="/">返回首页</a>
+</div>
+</body>
+</html>
