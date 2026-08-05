@@ -95,9 +95,21 @@
         } catch (e) { return; }
         if (!labels.length) { el.innerHTML = '<p style="text-align:center;color:var(--text-faint);padding-top:90px">暂无数据，访问网站后自动开始统计</p>'; return; }
         const W = el.clientWidth || 800, H = el.clientHeight || 260;
-        const pad = { l: 42, r: 14, t: 16, b: 30 };
-        const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
         const max = Math.max(10, ...pv, ...uv);
+
+        // 大数字缩写，防止 Y 轴标签挤在一起
+        function fmtAxis(n) {
+            if (n >= 100000000) return (n / 100000000).toFixed(1) + '亿';
+            if (n >= 10000) return (n / 10000).toFixed(1) + 'w';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+            return String(n);
+        }
+
+        // 根据最大数字宽度动态计算左内边距
+        const charW = 7; // 10px 字体约 7px 宽
+        const padL = Math.max(48, fmtAxis(max).length * charW + 16);
+        const pad = { l: padL, r: 14, t: 16, b: 34 };
+        const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
         const px = (i) => pad.l + i * (iw / Math.max(1, labels.length - 1));
         const py = (v) => pad.t + ih - (v / max) * ih;
         const line = (data, color, fill) => {
@@ -112,11 +124,18 @@
             const y = pad.t + (ih / 4) * g;
             const val = Math.round(max - (max / 4) * g);
             grid += '<line x1="' + pad.l + '" y1="' + y + '" x2="' + (W - pad.r) + '" y2="' + y + '" stroke="rgba(127,127,127,.12)"/>';
-            grid += '<text x="' + (pad.l - 8) + '" y="' + (y + 4) + '" fill="var(--text-faint)" font-size="10" text-anchor="end">' + val + '</text>';
+            grid += '<text x="' + (pad.l - 10) + '" y="' + (y + 4) + '" fill="var(--text-faint)" font-size="10" text-anchor="end">' + fmtAxis(val) + '</text>';
         }
+
+        // X 轴标签：根据数量自动跳过，避免重叠
+        let xSkip = 1;
+        if (labels.length > 36) xSkip = Math.ceil(labels.length / 6);
+        else if (labels.length > 18) xSkip = Math.ceil(labels.length / 10);
+        else if (labels.length > 10) xSkip = 2;
+
         const xLabels = labels.map((l, i) => {
-            if (labels.length > 40 && i % Math.ceil(labels.length / 12) !== 0) return '';
-            return '<text x="' + px(i) + '" y="' + (H - 8) + '" fill="var(--text-faint)" font-size="10" text-anchor="middle">' + l + '</text>';
+            if (i % xSkip !== 0) return '';
+            return '<text x="' + px(i) + '" y="' + (H - 10) + '" fill="var(--text-faint)" font-size="10" text-anchor="middle">' + l + '</text>';
         }).join('');
         const legend = '<text x="' + pad.l + '" y="14" fill="var(--text)" font-size="11">— PV</text><text x="' + (pad.l + 52) + '" y="14" fill="var(--text-dim)" font-size="11">— UV</text>';
         el.innerHTML = '<svg width="100%" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" style="overflow:visible">' +
