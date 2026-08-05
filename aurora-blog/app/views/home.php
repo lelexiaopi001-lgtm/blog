@@ -7,95 +7,83 @@ $heroBg = Helper::setting('site_hero_bg');
 ?>
 
 <!-- Hero -->
-<section class="hero reveal">
-    <?php if ($heroBg): ?>
-    <div class="hero-bg">
-        <img src="<?= Helper::e($heroBg) ?>" alt="" loading="eager">
-    </div>
-    <?php endif; ?>
+<section class="hero" id="hero">
     <div class="hero-content">
-        <p class="hero-eyebrow"><?= Helper::e(Helper::setting('site_hero_eyebrow', 'WELCOME')) ?></p>
-        <h1 class="hero-title"><?= Helper::e($siteName) ?></h1>
-        <p class="hero-desc"><?= Helper::e(Helper::setting('site_slogan') ?: $siteDesc) ?></p>
+        <svg class="hero-logo" viewBox="0 0 64 48" aria-hidden="true">
+            <path d="M4 12h56M8 8v-4h48v4M12 12v28h4V12M48 12v28h4V12M20 40h24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1 class="hero-title font-title"><?= Helper::e($siteName) ?></h1>
+        <p class="hero-tagline font-body"><?= Helper::e(Helper::setting('site_slogan') ?: $siteDesc) ?></p>
         <?php if (Helper::setting('site_motto')): ?>
-        <p class="hero-motto"><?= Helper::e(Helper::setting('site_motto')) ?></p>
+        <p class="font-body" style="opacity:0.8;margin-bottom:24px;font-size:0.95rem;"><?= Helper::e(Helper::setting('site_motto')) ?></p>
         <?php endif; ?>
-        <div class="hero-actions">
-            <a class="btn btn-primary" href="/archive">
-                <svg class="icon icon-sm"><use href="/assets/img/icons.svg#i-book-open"></use></svg>
-                开始阅读
-            </a>
-            <a class="btn btn-ghost" href="/about">关于我</a>
-        </div>
+        <a href="#recent-posts" class="hero-scroll font-body">
+            <i data-lucide="chevron-down"></i>
+            <span>最近文章</span>
+        </a>
     </div>
-    <?php if (Helper::setting('site_avatar')): ?>
-    <div class="hero-visual reveal">
-        <img src="<?= Helper::e(Helper::setting('site_avatar')) ?>" alt="<?= Helper::e($siteName) ?>">
+    <div class="hero-vertical font-body">
+        <span>物哀</span><span>·</span><span>時間</span><span>·</span><span>参道</span>
     </div>
-    <?php endif; ?>
 </section>
 
 <?php if (empty($posts) && empty($tops)): ?>
-<div class="empty-state reveal">
-    <div class="empty-icon">🚀</div>
-    <h2>欢迎来到 <?= Helper::e($siteName) ?></h2>
-    <p>博客刚刚搭建好，还没有文章。</p>
-    <a class="btn btn-primary" href="/admin/index.php?r=post_edit" style="margin-top:16px">去后台写第一篇文章</a>
-</div>
+<section class="section" style="text-align:center;padding:120px 24px;">
+    <div class="section-inner">
+        <h2 class="font-title" style="font-size:1.5rem;margin-bottom:16px;">欢迎来到 <?= Helper::e($siteName) ?></h2>
+        <p style="color:var(--aurora-ink-muted);margin-bottom:24px;">博客刚刚搭建好，还没有文章。</p>
+        <a class="btn btn-primary font-body" href="/admin/index.php?r=post_edit">去后台写第一篇文章</a>
+    </div>
+</section>
 <?php endif; ?>
 
 <!-- 精选文章 -->
 <?php if (!empty($tops)): ?>
-<section class="featured-section reveal">
-    <h2 class="section-title">精选文章</h2>
-    <div class="post-grid">
-        <?php foreach (array_slice($tops, 0, 2) as $top): ?>
-        <article class="post-card featured">
-            <div class="featured-badge">精选</div>
-            <?php if ($top['cover']): ?>
-            <div class="card-cover">
-                <img src="<?= Helper::e($top['cover']) ?>" alt="<?= Helper::e($top['title']) ?>" loading="lazy">
-            </div>
-            <?php endif; ?>
-            <div class="card-body">
-                <div class="card-meta">
-                    <?php if ($top['cat_name']): ?><a class="cat-badge" href="/category/<?= Helper::e($top['cat_slug']) ?>"><?= Helper::e($top['cat_name']) ?></a><?php endif; ?>
-                    <time datetime="<?= Helper::e($top['published_at']) ?>"><?= Helper::date($top['published_at']) ?></time>
-                    <span><?= Helper::readingTime((string) $top['content']) ?> 分钟</span>
+<section class="section" id="featured-posts">
+    <div class="section-inner">
+        <h2 class="section-title font-title">精选文章</h2>
+        <div class="post-cards">
+            <?php foreach (array_slice($tops, 0, 4) as $top): ?>
+            <a href="/post/<?= Helper::e($top['slug']) ?>" class="post-card">
+                <div class="post-card-image" role="img" aria-label="<?= Helper::e($top['title']) ?>"
+                    <?php if ($top['cover']): ?>style="background-image:url('<?= Helper::e($top['cover']) ?>')"<?php endif; ?>></div>
+                <div class="post-card-body">
+                    <h3 class="post-card-title font-title"><?= Helper::e($top['title']) ?></h3>
+                    <p class="post-card-excerpt font-body"><?= Helper::e($top['summary'] ?: Markdown::plain((string) $top['content'], 100)) ?></p>
+                    <div class="post-card-meta font-mono">
+                        <span><?= Helper::date($top['published_at'], 'Y.m.d') ?></span>
+                        <?php if ($top['cat_name']): ?><span><?= Helper::e($top['cat_name']) ?></span><?php endif; ?>
+                    </div>
                 </div>
-                <h2 class="card-title"><a href="/post/<?= Helper::e($top['slug']) ?>"><?= Helper::e($top['title']) ?></a></h2>
-                <p class="card-summary"><?= Helper::e($top['summary'] ?: Markdown::plain((string) $top['content'], 140)) ?></p>
-                <div class="card-foot">
-                    <span><svg class="icon icon-sm"><use href="/assets/img/icons.svg#i-eye"></use></svg> <?= (int) $top['views'] ?></span>
-                    <span><svg class="icon icon-sm"><use href="/assets/img/icons.svg#i-message"></use></svg> <?= (int) $top['comment_count'] ?></span>
-                    <span><svg class="icon icon-sm"><use href="/assets/img/icons.svg#i-heart"></use></svg> <?= (int) $top['likes'] ?></span>
-                </div>
-            </div>
-        </article>
-        <?php endforeach; ?>
+            </a>
+            <?php endforeach; ?>
+        </div>
     </div>
 </section>
 <?php endif; ?>
 
 <!-- 最新文章 -->
 <?php if (!empty($posts)): ?>
-<section class="latest-section reveal">
-    <h2 class="section-title">最新文章</h2>
-    <div class="post-list">
-        <?php foreach ($posts as $p): ?>
-        <article class="post-list-item reveal">
-            <div>
-                <h3><a href="/post/<?= Helper::e($p['slug']) ?>"><?= Helper::e($p['title']) ?></a></h3>
-                <div class="post-list-meta">
-                    <?php if ($p['cat_name']): ?><a href="/category/<?= Helper::e($p['cat_slug']) ?>"><?= Helper::e($p['cat_name']) ?></a><?php endif; ?>
-                    <time datetime="<?= Helper::e($p['published_at']) ?>"><?= Helper::date($p['published_at']) ?></time>
-                    <span><?= Helper::readingTime((string) $p['content']) ?> 分钟</span>
+<section id="recent-posts" class="section">
+    <div class="section-inner">
+        <h2 class="section-title font-title">最近文章</h2>
+        <div class="post-cards">
+            <?php foreach ($posts as $p): ?>
+            <a href="/post/<?= Helper::e($p['slug']) ?>" class="post-card">
+                <div class="post-card-image" role="img" aria-label="<?= Helper::e($p['title']) ?>"
+                    <?php if ($p['cover']): ?>style="background-image:url('<?= Helper::e($p['cover']) ?>')"<?php endif; ?>></div>
+                <div class="post-card-body">
+                    <h3 class="post-card-title font-title"><?= Helper::e($p['title']) ?></h3>
+                    <p class="post-card-excerpt font-body"><?= Helper::e($p['summary'] ?: Markdown::plain((string) $p['content'], 100)) ?></p>
+                    <div class="post-card-meta font-mono">
+                        <span><?= Helper::date($p['published_at'], 'Y.m.d') ?></span>
+                        <?php if ($p['cat_name']): ?><span><?= Helper::e($p['cat_name']) ?></span><?php endif; ?>
+                    </div>
                 </div>
-            </div>
-            <time class="post-list-date" datetime="<?= Helper::e($p['published_at']) ?>"><?= Helper::date($p['published_at'], 'Y-m-d') ?></time>
-        </article>
-        <?php endforeach; ?>
+            </a>
+            <?php endforeach; ?>
+        </div>
+        <?= Helper::pagination($pg, '/page/') ?>
     </div>
 </section>
-<?= Helper::pagination($pg, '/page/') ?>
 <?php endif; ?>

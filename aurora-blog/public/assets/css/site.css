@@ -1,0 +1,785 @@
+/* Aurora Blog 四季神社主题 · 页面级样式 */
+
+/* ===== 季节变量覆盖（由 data-season 驱动） ===== */
+:root[data-season="spring"] {
+  --aurora-season-primary: var(--aurora-spring-primary);
+  --aurora-season-deep: var(--aurora-spring-deep);
+  --aurora-season-light: var(--aurora-spring-light);
+  --aurora-season-bg: var(--aurora-spring-bg);
+}
+:root[data-season="summer"] {
+  --aurora-season-primary: var(--aurora-summer-primary);
+  --aurora-season-deep: var(--aurora-summer-deep);
+  --aurora-season-light: var(--aurora-summer-light);
+  --aurora-season-bg: var(--aurora-summer-bg);
+}
+:root[data-season="autumn"] {
+  --aurora-season-primary: var(--aurora-autumn-primary);
+  --aurora-season-deep: var(--aurora-autumn-deep);
+  --aurora-season-light: var(--aurora-autumn-light);
+  --aurora-season-bg: var(--aurora-autumn-bg);
+}
+:root[data-season="winter"] {
+  --aurora-season-primary: var(--aurora-winter-primary);
+  --aurora-season-deep: var(--aurora-winter-deep);
+  --aurora-season-light: var(--aurora-winter-light);
+  --aurora-season-bg: var(--aurora-winter-bg);
+}
+
+/* ===== 基础排版与滚动 ===== */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: var(--aurora-font-body);
+  line-height: 1.75;
+}
+
+.font-title { font-family: var(--aurora-font-title); }
+.font-body  { font-family: var(--aurora-font-body); }
+.font-mono  { font-family: var(--aurora-font-mono); }
+
+/* ===== 顶部导航 ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--aurora-background) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--aurora-border);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--aurora-foreground);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.torii-logo {
+  width: 32px;
+  height: 24px;
+  color: var(--aurora-season-deep);
+}
+
+.site-name {
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 14px;
+  border-radius: var(--aurora-radius-full);
+  color: var(--aurora-ink-soft);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  color: var(--aurora-season-deep);
+  background: var(--aurora-season-bg);
+}
+
+/* ===== 季节切换器 ===== */
+.season-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.season-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--aurora-border);
+  background: var(--aurora-washi-deep);
+  color: var(--aurora-ink-soft);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
+}
+
+.season-dot:hover {
+  transform: translateY(-2px);
+}
+
+.season-dot.is-active {
+  border-color: var(--aurora-season-deep);
+  color: #fff;
+  background: var(--aurora-season-deep);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--aurora-season-primary) 30%, transparent);
+}
+
+/* ===== 全局时间氛围叠层 ===== */
+.time-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-color: var(--aurora-time-tint);
+  backdrop-filter: brightness(var(--aurora-time-brightness)) saturate(var(--aurora-time-saturate));
+  transition: background-color 1.2s ease, backdrop-filter 1.2s ease;
+}
+
+/* ===== 首页全屏英雄区 ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  background-color: var(--aurora-washi-deep);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out;
+}
+
+:root[data-season="spring"] .hero { background-image: url('../hero-spring.jpg'); }
+:root[data-season="summer"] .hero { background-image: url('../hero-summer.jpg'); }
+:root[data-season="autumn"] .hero { background-image: url('../hero-autumn.jpg'); }
+:root[data-season="winter"] .hero { background-image: url('../hero-winter.jpg'); }
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--aurora-ink) 18%, transparent) 0%,
+    color-mix(in srgb, var(--aurora-ink) 8%, transparent) 40%,
+    color-mix(in srgb, var(--aurora-ink) 35%, transparent) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 24px;
+  max-width: 720px;
+}
+
+.hero-logo {
+  width: 72px;
+  height: 54px;
+  margin: 0 auto 24px;
+  color: #fff;
+  opacity: 0.95;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 16px color-mix(in srgb, var(--aurora-ink) 30%, transparent);
+}
+
+.hero-tagline {
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  opacity: 0.92;
+  letter-spacing: 0.1em;
+  margin-bottom: 36px;
+}
+
+.hero-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--aurora-radius-full);
+  border: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(4px);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.hero-scroll:hover {
+  background: rgba(255,255,255,0.22);
+  border-color: #fff;
+}
+
+.hero-vertical {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+}
+
+/* ===== 通用内容容器 ===== */
+.site-main {
+  min-height: 60vh;
+}
+
+.section {
+  padding: 80px 24px;
+}
+
+.section-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--aurora-foreground);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--aurora-border);
+}
+
+/* ===== 最近文章 / 卡片 ===== */
+.post-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--aurora-card);
+  border: 1px solid var(--aurora-border);
+  border-radius: var(--aurora-radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--aurora-ink) 8%, transparent);
+  border-color: var(--aurora-season-primary);
+}
+
+.post-card-image {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+}
+
+:root[data-season="spring"] .post-card-image { background-image: url('../hero-spring.jpg'); }
+:root[data-season="summer"] .post-card-image { background-image: url('../hero-summer.jpg'); }
+:root[data-season="autumn"] .post-card-image { background-image: url('../hero-autumn.jpg'); }
+:root[data-season="winter"] .post-card-image { background-image: url('../hero-winter.jpg'); }
+
+.post-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.post-card-title {
+  font-size: 1.15rem;
+  color: var(--aurora-foreground);
+  line-height: 1.4;
+}
+
+.post-card-excerpt {
+  font-size: 0.92rem;
+  color: var(--aurora-ink-soft);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-card-meta {
+  font-size: 0.8rem;
+  color: var(--aurora-ink-muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== 列表页横幅 ===== */
+.page-banner {
+  position: relative;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  background-color: var(--aurora-washi-deep);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+:root[data-season="spring"] .page-banner { background-image: url('../hero-spring.jpg'); }
+:root[data-season="summer"] .page-banner { background-image: url('../hero-summer.jpg'); }
+:root[data-season="autumn"] .page-banner { background-image: url('../hero-autumn.jpg'); }
+:root[data-season="winter"] .page-banner { background-image: url('../hero-winter.jpg'); }
+
+.page-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--aurora-ink) 28%, transparent);
+}
+
+.page-banner-content {
+  position: relative;
+  z-index: 2;
+}
+
+.page-banner-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: 0.12em;
+}
+
+.page-banner-subtitle {
+  margin-top: 12px;
+  opacity: 0.9;
+  letter-spacing: 0.08em;
+}
+
+/* ===== 文章页 ===== */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  background: var(--aurora-border);
+}
+
+.reading-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--aurora-season-primary), var(--aurora-season-deep));
+  transition: width 0.1s linear;
+}
+
+.article-layout {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 24px 120px;
+}
+
+.article-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.article-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.3;
+  margin-bottom: 20px;
+}
+
+.article-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--aurora-ink-muted);
+  font-size: 0.9rem;
+}
+
+.article-tags {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.tag {
+  padding: 4px 12px;
+  border-radius: var(--aurora-radius-full);
+  font-size: 0.8rem;
+  background: var(--aurora-season-bg);
+  color: var(--aurora-season-deep);
+  border: 1px solid var(--aurora-border);
+}
+
+/* 竖排章节标记 */
+.chapter-marker {
+  position: absolute;
+  left: -48px;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: var(--aurora-ink-muted);
+  font-size: 0.85rem;
+}
+
+.chapter-marker span {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.3em;
+  padding: 12px 8px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.chapter-marker span:hover,
+.chapter-marker span.is-active {
+  color: var(--aurora-season-deep);
+  border-left-color: var(--aurora-season-primary);
+}
+
+.article-body {
+  font-size: 1.05rem;
+  color: var(--aurora-foreground);
+}
+
+.article-body h2 {
+  font-family: var(--aurora-font-title);
+  font-size: 1.5rem;
+  margin-top: 56px;
+  margin-bottom: 20px;
+  color: var(--aurora-foreground);
+  scroll-margin-top: 100px;
+}
+
+.article-body p {
+  margin-bottom: 1.6em;
+  text-align: justify;
+  text-align-last: left;
+  line-height: 2;
+}
+
+.article-body blockquote {
+  margin: 32px 0;
+  padding: 20px 24px;
+  border-left: 3px solid var(--aurora-season-primary);
+  background: var(--aurora-card);
+  border-radius: 0 var(--aurora-radius-md) var(--aurora-radius-md) 0;
+  color: var(--aurora-ink-soft);
+  font-style: italic;
+}
+
+.article-footer {
+  margin-top: 72px;
+  padding-top: 32px;
+  border-top: 1px solid var(--aurora-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--aurora-radius-full);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--aurora-season-deep);
+  color: #fff;
+  border: 1px solid var(--aurora-season-deep);
+}
+
+.btn-primary:hover {
+  background: var(--aurora-season-primary);
+  border-color: var(--aurora-season-primary);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--aurora-ink-soft);
+  border: 1px solid var(--aurora-border);
+}
+
+.btn-ghost:hover {
+  background: var(--aurora-card);
+  color: var(--aurora-season-deep);
+}
+
+/* ===== 关于页 ===== */
+.about-hero {
+  position: relative;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  background-color: var(--aurora-washi-deep);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+:root[data-season="spring"] .about-hero { background-image: url('../hero-spring.jpg'); }
+:root[data-season="summer"] .about-hero { background-image: url('../hero-summer.jpg'); }
+:root[data-season="autumn"] .about-hero { background-image: url('../hero-autumn.jpg'); }
+:root[data-season="winter"] .about-hero { background-image: url('../hero-winter.jpg'); }
+
+.about-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--aurora-ink) 22%, transparent);
+}
+
+.about-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.about-card {
+  max-width: 640px;
+  margin: -60px auto 0;
+  padding: 48px;
+  background: var(--aurora-card);
+  border: 1px solid var(--aurora-border);
+  border-radius: var(--aurora-radius-lg);
+  text-align: center;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  background-size: cover;
+  background-position: center;
+  border: 3px solid var(--aurora-season-primary);
+}
+
+:root[data-season="spring"] .avatar { background-image: url('../hero-spring.jpg'); }
+:root[data-season="summer"] .avatar { background-image: url('../hero-summer.jpg'); }
+:root[data-season="autumn"] .avatar { background-image: url('../hero-autumn.jpg'); }
+:root[data-season="winter"] .avatar { background-image: url('../hero-winter.jpg'); }
+
+.about-name {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+.about-bio {
+  color: var(--aurora-ink-soft);
+  line-height: 1.9;
+  margin-bottom: 32px;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.social-link {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--aurora-border);
+  color: var(--aurora-ink-soft);
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.social-link:hover {
+  background: var(--aurora-season-bg);
+  color: var(--aurora-season-deep);
+  border-color: var(--aurora-season-primary);
+}
+
+/* ===== 页脚 ===== */
+.site-footer {
+  padding: 48px 24px;
+  border-top: 1px solid var(--aurora-border);
+  background: var(--aurora-background);
+}
+
+.footer-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.torii-divider {
+  width: 120px;
+  margin: 0 auto 20px;
+  color: var(--aurora-ink-muted);
+  opacity: 0.7;
+}
+
+.footer-copy {
+  color: var(--aurora-ink-muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+/* ===== 点赞按钮 ===== */
+.like-btn.liked {
+  color: #e74c3c;
+  border-color: #e74c3c;
+  background: rgba(231, 76, 60, 0.08);
+  pointer-events: none;
+}
+
+.like-btn.liked i {
+  fill: #e74c3c;
+}
+
+/* ===== 分页 ===== */
+.pagination-inner {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 48px;
+}
+
+.pg-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: var(--aurora-radius-full);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-family: var(--aurora-font-body);
+  border: 1px solid var(--aurora-border);
+  color: var(--aurora-ink-soft);
+  background: transparent;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.pg-item:hover {
+  background: var(--aurora-card);
+  color: var(--aurora-season-deep);
+  border-color: var(--aurora-season-primary);
+}
+
+.pg-item.active {
+  background: var(--aurora-season-deep);
+  color: #fff;
+  border-color: var(--aurora-season-deep);
+}
+
+.pg-item.disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ===== 代码块样式 ===== */
+pre {
+  background: var(--aurora-muted);
+  border: 1px solid var(--aurora-border);
+  border-radius: var(--aurora-radius-md);
+  padding: 16px;
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+code {
+  font-family: var(--aurora-font-mono);
+  font-size: 0.9rem;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 900px) {
+  .chapter-marker {
+    display: none;
+  }
+
+  .hero-vertical {
+    display: none;
+  }
+
+  .post-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-inner {
+    padding: 0 16px;
+  }
+
+  .site-nav {
+    gap: 4px;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  .season-switcher {
+    gap: 6px;
+  }
+
+  .season-dot {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .section {
+    padding: 56px 16px;
+  }
+
+  .article-layout {
+    padding: 40px 16px 80px;
+  }
+
+  .about-card {
+    padding: 32px 24px;
+    margin: -40px 16px 0;
+  }
+
+  .article-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
